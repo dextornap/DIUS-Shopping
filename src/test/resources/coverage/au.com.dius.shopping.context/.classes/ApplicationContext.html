@@ -1,0 +1,180 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ApplicationContext</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">au.com.dius.shopping.context</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ApplicationContext (au.com.dius.shopping.context)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ApplicationContext</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/ 4)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ApplicationContext$Singleton</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (6/ 8)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package au.com.dius.shopping.context;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import au.com.dius.shopping.constant.SKU;
+<i>4</i>&nbsp;import au.com.dius.shopping.domain.Catalogue;
+<i>5</i>&nbsp;import au.com.dius.shopping.domain.Item;
+<i>6</i>&nbsp;import au.com.dius.shopping.rules.BulkDiscountPricingRule;
+<i>7</i>&nbsp;import au.com.dius.shopping.rules.FreeBeePricingRule;
+<i>8</i>&nbsp;import au.com.dius.shopping.rules.IPricingRule;
+<i>9</i>&nbsp;import au.com.dius.shopping.rules.ThreeForTwoPricingRule;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.util.*;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;/**
+<i>14</i>&nbsp; * A class representing root context of the Shopping application.
+<i>15</i>&nbsp; * It does the central initialization of catalog and pricing rules for items sold in the computer store.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;public class ApplicationContext {
+<i>18</i>&nbsp;
+<b class="nc"><i>19</i>&nbsp;    private ApplicationContext() {</b>
+<b class="nc"><i>20</i>&nbsp;    }</b>
+<i>21</i>&nbsp;
+<b class="fc"><i>22</i>&nbsp;    private enum Singleton {</b>
+<i>23</i>&nbsp;
+<b class="fc"><i>24</i>&nbsp;        INSTANCE;</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;        private Catalogue catalogue;
+<i>27</i>&nbsp;        private Map&lt;SKU, IPricingRule&gt; pricingRules = new HashMap&lt;&gt;();
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;        Singleton() {
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;            // build catalogue
+<i>32</i>&nbsp;            Set&lt;Item&gt; items = new HashSet&lt;&gt;();
+<i>33</i>&nbsp;            items.add(new Item(SKU.ipd, &quot;Super iPad&quot;, 549.99));
+<i>34</i>&nbsp;            items.add(new Item(SKU.mbp, &quot;MacBook Pro&quot;, 1399.99));
+<i>35</i>&nbsp;            items.add(new Item(SKU.atv, &quot;Apple TV&quot;, 109.50));
+<i>36</i>&nbsp;            items.add(new Item(SKU.vga, &quot;VGA adapter&quot;, 30.00));
+<i>37</i>&nbsp;            catalogue = new Catalogue(items);
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;            // build pricing rules
+<i>40</i>&nbsp;            pricingRules.put(SKU.atv, new ThreeForTwoPricingRule(SKU.atv));
+<i>41</i>&nbsp;            pricingRules.put(SKU.ipd, new BulkDiscountPricingRule(SKU.ipd, 4, 499.99));
+<i>42</i>&nbsp;            pricingRules.put(SKU.mbp, new FreeBeePricingRule(SKU.mbp, SKU.vga));
+<i>43</i>&nbsp;            pricingRules.put(SKU.vga, new FreeBeePricingRule(SKU.mbp, SKU.vga));
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;        }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;        private Catalogue getCatalogue() {
+<b class="fc"><i>48</i>&nbsp;            return catalogue;</b>
+<i>49</i>&nbsp;        }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;        private Map&lt;SKU, IPricingRule&gt; getPricingRules() {
+<b class="fc"><i>52</i>&nbsp;            return Collections.unmodifiableMap(pricingRules);</b>
+<i>53</i>&nbsp;        }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * @return catalogue
+<i>59</i>&nbsp;     */
+<i>60</i>&nbsp;    public static Catalogue getCatalogue() {
+<b class="fc"><i>61</i>&nbsp;        return Singleton.INSTANCE.getCatalogue();</b>
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    /**
+<i>65</i>&nbsp;     * @return map of pricing rules
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public static Map&lt;SKU, IPricingRule&gt; getPricingRules() {
+<b class="fc"><i>68</i>&nbsp;        return Singleton.INSTANCE.getPricingRules();</b>
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-02-02 23:26</div>
+</div>
+</body>
+</html>

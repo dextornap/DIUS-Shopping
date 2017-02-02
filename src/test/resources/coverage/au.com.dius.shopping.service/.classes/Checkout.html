@@ -1,0 +1,158 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Checkout</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">au.com.dius.shopping.service</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Checkout (au.com.dius.shopping.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Checkout</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/ 18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package au.com.dius.shopping.service;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import au.com.dius.shopping.constant.SKU;
+<i>4</i>&nbsp;import au.com.dius.shopping.domain.Item;
+<i>5</i>&nbsp;import au.com.dius.shopping.domain.ItemStatistics;
+<i>6</i>&nbsp;import au.com.dius.shopping.rules.IPricingRule;
+<i>7</i>&nbsp;import au.com.dius.shopping.util.CommonUtils;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.util.HashMap;
+<i>10</i>&nbsp;import java.util.Map;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;/**
+<i>13</i>&nbsp; * A class representing a POS (point of sales) checkout counter
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;public class Checkout {
+<i>16</i>&nbsp;
+<b class="fc"><i>17</i>&nbsp;    private Map&lt;Item, ItemStatistics&gt; cart = new HashMap&lt;&gt;();</b>
+<i>18</i>&nbsp;    private Map&lt;SKU, IPricingRule&gt; pricingRules;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    /**
+<i>21</i>&nbsp;     * @param pricingRules set of pricing rules applicable on items scanned at this checkout counter
+<i>22</i>&nbsp;     */
+<b class="fc"><i>23</i>&nbsp;    public Checkout(final Map&lt;SKU, IPricingRule&gt; pricingRules) {</b>
+<b class="fc"><i>24</i>&nbsp;        this.pricingRules = pricingRules;</b>
+<b class="fc"><i>25</i>&nbsp;    }</b>
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    /**
+<i>28</i>&nbsp;     * Item scanned is added to shopping cart.
+<i>29</i>&nbsp;     * Look up pricing rule applicable on the item scanned.
+<i>30</i>&nbsp;     * Apply pricing rule on the shopping cart.
+<i>31</i>&nbsp;     *
+<i>32</i>&nbsp;     * @param sku item scanned
+<i>33</i>&nbsp;     * @return
+<i>34</i>&nbsp;     */
+<i>35</i>&nbsp;    public Checkout scan(final SKU sku) {
+<i>36</i>&nbsp;
+<b class="fc"><i>37</i>&nbsp;        Item item = CommonUtils.findItemInCart(sku, cart);</b>
+<i>38</i>&nbsp;
+<b class="fc"><i>39</i>&nbsp;        if (item == null) throw new RuntimeException(&quot;Item not found. Please check catalogue.&quot;);</b>
+<i>40</i>&nbsp;
+<b class="fc"><i>41</i>&nbsp;        ItemStatistics stats = cart.get(item);</b>
+<b class="fc"><i>42</i>&nbsp;        stats = stats != null ? stats : new ItemStatistics();</b>
+<i>43</i>&nbsp;
+<b class="fc"><i>44</i>&nbsp;        stats.incrementQuantity(1);</b>
+<b class="fc"><i>45</i>&nbsp;        stats.setAmount(item.getPrice());</b>
+<i>46</i>&nbsp;
+<b class="fc"><i>47</i>&nbsp;        cart.put(item, stats);</b>
+<i>48</i>&nbsp;
+<b class="fc"><i>49</i>&nbsp;        IPricingRule pricingRule = pricingRules.get(sku);</b>
+<i>50</i>&nbsp;
+<b class="fc"><i>51</i>&nbsp;        if (pricingRule != null) {</b>
+<b class="fc"><i>52</i>&nbsp;            pricingRule.applyOn(cart);</b>
+<i>53</i>&nbsp;        }
+<i>54</i>&nbsp;
+<b class="fc"><i>55</i>&nbsp;        return this;</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * Produces sum total of amounts of all items in the shopping cart.
+<i>61</i>&nbsp;     * Clears the shopping cart for next customer checkout.
+<i>62</i>&nbsp;     *
+<i>63</i>&nbsp;     * @return total amount payable by customer
+<i>64</i>&nbsp;     */
+<i>65</i>&nbsp;    public double total() {
+<i>66</i>&nbsp;
+<b class="fc"><i>67</i>&nbsp;        Double amountToPay = cart.values().stream().map(stat -&gt; stat.getAmount()).mapToDouble(Double::doubleValue).sum();</b>
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;        cart.clear();</b>
+<i>70</i>&nbsp;
+<b class="fc"><i>71</i>&nbsp;        return amountToPay;</b>
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    }
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-02-02 23:26</div>
+</div>
+</body>
+</html>

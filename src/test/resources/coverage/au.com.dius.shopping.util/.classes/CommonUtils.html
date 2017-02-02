@@ -1,0 +1,110 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CommonUtils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">au.com.dius.shopping.util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CommonUtils (au.com.dius.shopping.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CommonUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package au.com.dius.shopping.util;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import au.com.dius.shopping.constant.SKU;
+<i>4</i>&nbsp;import au.com.dius.shopping.context.ApplicationContext;
+<i>5</i>&nbsp;import au.com.dius.shopping.domain.Item;
+<i>6</i>&nbsp;import au.com.dius.shopping.domain.ItemStatistics;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.util.Map;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * A class to hold common utility methods for the application.
+<i>12</i>&nbsp; */
+<b class="nc"><i>13</i>&nbsp;public class CommonUtils {</b>
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    /**
+<i>16</i>&nbsp;     * Finds item in the given cart. If not found in cart, looks up in the catalogue
+<i>17</i>&nbsp;     *
+<i>18</i>&nbsp;     * @param sku  search item
+<i>19</i>&nbsp;     * @param cart shopping cart
+<i>20</i>&nbsp;     * @return
+<i>21</i>&nbsp;     */
+<i>22</i>&nbsp;    public static Item findItemInCart(final SKU sku, final Map&lt;Item, ItemStatistics&gt; cart) {
+<b class="fc"><i>23</i>&nbsp;        return sku == null ? null : cart.keySet().stream().filter(item -&gt; item.getSKU() == sku)</b>
+<b class="fc"><i>24</i>&nbsp;                .findFirst()</b>
+<b class="fc"><i>25</i>&nbsp;                .orElse(ApplicationContext.getCatalogue().getItem(sku));</b>
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-02-02 23:26</div>
+</div>
+</body>
+</html>
