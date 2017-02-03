@@ -48,7 +48,7 @@ Implementation Environment
 
  - Test Coverage Report : genearated using IntelliJ - `Run Tests with coverage` tool
  
- - Test Coverage Report Location : `/test/resources/coverage/index.html`
+ - Test Coverage Report Location : `src/test/resources/coverage/index.html`
 
 
 How to use

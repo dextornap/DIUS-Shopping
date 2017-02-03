@@ -20,11 +20,11 @@ public class Catalogue {
     }
 
     /**
-     * @param ipd
+     * @param sku
      * @return
      */
-    public Item getItem(final SKU ipd) {
-        return items.stream().filter(item -> item.getSKU() == ipd).findFirst().get();
+    public Item getItem(final SKU sku) {
+        return items.stream().filter(item -> item.getSKU() == sku).findFirst().get();
     }
 
     /**
